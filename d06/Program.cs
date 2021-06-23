@@ -24,12 +24,16 @@ namespace d06
             Console.WriteLine("Lines by people count:");
 
             var i = 0;
-            while (shop.IsOpen)
+            while (shop.IsOpen && i < customerCount)
             {
                 var customer = customers[i++];
                 
                 customer.FillCart(cartCapacity);
-                shop.Storage.ItemsInStorage -= customer.ItemsInCart;
+
+                if (customer.ItemsInCart <= shop.Storage.ItemsInStorage)
+                    shop.Storage.ItemsInStorage -= customer.ItemsInCart;
+                else
+                    shop.Storage.ItemsInStorage = 0;
                 
                 var register = customer.GetInLineByPeople(shop.Registers);
                 Console.WriteLine($"{customer} to {register}");
